@@ -1,5 +1,5 @@
 # args
-A program argument manager.
+Parse command line arguments.
 
 Inspired by The clean code: ISBN: 978-0-13-235088-2
 
