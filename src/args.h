@@ -120,20 +120,23 @@ class IntegerArgumentMarshaler : public ArgumentMarshaler {
             {
                 auto tmp = it + 1;
                 if(tmp == end) {
-                    std::string msg("Wrong parameter option for argument: ");
+                    std::string msg("Wrong parameter option for argument '");
                     msg += *it;
+                    msg += "'.";
                     throw std::runtime_error(msg);
                 }
-                if(tmp->at(0) == '-') {
-                    std::string msg("Invalid start of option for argument: ");
-                    msg += *it;
-                    msg += " ; cannot start with '-' char. An Integer value is required";
-                    throw std::runtime_error(msg);
+                if (tmp->length() > 1) {
+                    if(tmp->at(0) == '-' && !std::isdigit(tmp->at(1))) {
+                        std::string msg("Invalid option for argument '");
+                        msg += *it;
+                        msg += "' ; '-' cannot be followed by characters. An Integer value is required";
+                        throw std::runtime_error(msg);
+                    }
                 }
                 if(!StringHelper::isNumber(*tmp)) {
                     std::string msg("Argument ");
                     msg += *it;
-                    msg += " require an Integer.";
+                    msg += " require an Integer value.";
                     throw std::runtime_error(msg);
                 }
             }
@@ -163,20 +166,23 @@ class DoubleArgumentMarshaler : public ArgumentMarshaler {
             {
                 auto tmp = it + 1;
                 if(tmp == end) {
-                    std::string msg("Wrong parameter option for argument: ");
+                    std::string msg("Wrong parameter option for argument '");
                     msg += *it;
+                    msg += "'.";
                     throw std::runtime_error(msg);
                 }
-                if(tmp->at(0) == '-') {
-                    std::string msg("Invalid start of option for argument: ");
-                    msg += *it;
-                    msg += " ; cannot start with '-' char. A double value is required";
-                    throw std::runtime_error(msg);
+                if (tmp->length() > 1) {
+                    if(tmp->at(0) == '-' && !std::isdigit(tmp->at(1))) {
+                        std::string msg("Invalid option for argument '");
+                        msg += *it;
+                        msg += "' ; '-' cannot be followed by characters. A double value is required.";
+                        throw std::runtime_error(msg);
+                    }
                 }
                 if(!StringHelper::isDouble(*tmp)) {
                     std::string msg("Argument ");
                     msg += *it;
-                    msg += " require a Double.";
+                    msg += " require a Double value.";
                     throw std::runtime_error(msg);
                 }
             }

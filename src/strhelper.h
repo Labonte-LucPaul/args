@@ -15,7 +15,7 @@
 #include <sstream>
 #include <string>
 #include <algorithm>
-
+#include <iostream>
 class StringHelper {
 
     public:
@@ -56,16 +56,24 @@ class StringHelper {
         }
 
         static inline bool isNumber(std::string str) {
+            size_t neg = std::count(str.begin(), str.end(), '-');
+            std::cout << neg << std::endl;
+            if(neg > 1)
+                return false;
             return !str.empty() && std::find_if(str.begin(),
-                   str.end(), [](char c) { return !std::isdigit(c); }) == str.end();
+                   str.end(), [](char c) { return !std::isdigit(c) && c != '-';}) == str.end();
         }
 
         static inline bool isDouble(std::string str) {
             size_t count = std::count(str.begin(), str.end(), '.');
             if(count > 1)
                 return false;
+            size_t neg = std::count(str.begin(), str.end(), '-');
+            std::cout << neg << std::endl;
+            if(neg > 1)
+                return false;
             return !str.empty() &&
-                   std::find_if(str.begin(), str.end(), [](char c) { return (!std::isdigit(c)) && c != '.'; }) == str.end();
+                   std::find_if(str.begin(), str.end(), [](char c) { return (!std::isdigit(c)) && (c != '.' && c != '-'); }) == str.end();
         }
 };
 

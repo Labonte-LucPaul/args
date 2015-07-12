@@ -25,11 +25,13 @@ int main(int argc, char* argv[]) {
         bool tm = args.getBoolean("m");
         std::string str = args.getString("d");
         int num = args.getInteger("p");
+        double time = args.getDouble("t");
 
         std::cout << "log?: " << test << std::endl;
         std::cout << "tm?: " << tm << std::endl;
         std::cout << "addr?: " << str << std::endl;
         std::cout << "port?: " << num << std::endl;
+        std::cout << "time?: " << time << std::endl;
 
     } catch(std::exception& ex) {
         std::cout << ex.what() << std::endl;
