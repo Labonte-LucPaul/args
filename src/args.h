@@ -38,6 +38,7 @@ class Args {
         bool getBoolean(std::string key);
         std::string getString(std::string key);
         int getInteger(std::string key);
+        double getDouble(std::string key);
         bool exists(std::string key);
 
     private:
@@ -182,8 +183,7 @@ class DoubleArgumentMarshaler : public ArgumentMarshaler {
 
             ++it;
             std::string str(*it);
-            int val = std::stoi(str);
-
+            double val = std::stod(str);
             this->valueDouble = val;
         }
         inline static double get(ArgumentMarshaler& am) {

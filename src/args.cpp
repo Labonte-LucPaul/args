@@ -105,6 +105,10 @@ int Args::getInteger(std::string key) {
     return IntegerArgumentMarshaler::get(*this->marshalers->at(key));
 }
 
+double Args::getDouble(std::string key) {
+    return DoubleArgumentMarshaler::get(*this->marshalers->at(key));
+}
+
 bool Args::exists(std::string key) {
     try {
         return this->marshalers->find(key) != this->marshalers->end();
