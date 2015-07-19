@@ -16,10 +16,6 @@ Args::Args(const std::string schema, int argc, char* argv[]) :
     parseArgumentStrings(v);
 }
 
-Args::~Args() {
-
-}
-
 void Args::parseSchema(const std::string schema) {
 
     auto sp = StringHelper::split(schema, ',');
@@ -115,4 +111,126 @@ bool Args::exists(std::string key) {
     } catch(std::exception& ex) {
         throw ex;
     }
+}
+
+BoolArgumentMarshaler::BoolArgumentMarshaler() : valueBool(false) {}
+
+void BoolArgumentMarshaler::set(std::vector<std::string>::iterator& it, const std::vector<std::string>::iterator& end) {
+    this->valueBool = true;
+}
+
+bool BoolArgumentMarshaler::get(ArgumentMarshaler& am) {
+    assert(&am != nullptr && "BoolArgumentMarshaler->get->Argument is NULL.");
+
+    return ((BoolArgumentMarshaler&)am).valueBool;
+}
+
+StringArgumentMarshaler::StringArgumentMarshaler() : valueString() {}
+
+void StringArgumentMarshaler::set(std::vector<std::string>::iterator& it, const std::vector<std::string>::iterator& end) {
+    {
+        auto tmp = it + 1;
+        if(tmp == end) {
+            std::string msg("Wrong parameter option for argument: ");
+            msg += *it;
+            throw std::runtime_error(msg);
+        }
+        if(tmp->at(0) == '-') {
+            std::string msg("Invalid start of option for argument: ");
+            msg += *it;
+            msg += " ; cannot start with '-' char. Try: \"\\\"-your string\\\"\"";
+            throw std::runtime_error(msg);
+        }
+    }
+
+    ++it;
+    std::string str(*it);
+    this->valueString = str;
+}
+
+std::string StringArgumentMarshaler::get(ArgumentMarshaler& am) {
+    assert(&am != nullptr && "StringArgumentMarshaler->get->Argument is NULL.");
+
+    return ((StringArgumentMarshaler&)am).valueString;
+}
+
+IntegerArgumentMarshaler::IntegerArgumentMarshaler() : valueInteger(0)  {}
+
+void IntegerArgumentMarshaler::set(std::vector<std::string>::iterator& it, const std::vector<std::string>::iterator& end) {
+
+    {
+        auto tmp = it + 1;
+        if(tmp == end) {
+            std::string msg("Wrong parameter option for argument '");
+            msg += *it;
+            msg += "'.";
+            throw std::runtime_error(msg);
+        }
+        if (tmp->length() > 1) {
+            if(tmp->at(0) == '-' && !std::isdigit(tmp->at(1))) {
+                std::string msg("Invalid option for argument '");
+                msg += *it;
+                msg += "' ; '-' cannot be followed by characters. An Integer value is required";
+                throw std::runtime_error(msg);
+            }
+        }
+        if(!StringHelper::isNumber(*tmp)) {
+            std::string msg("Argument ");
+            msg += *it;
+            msg += " require an Integer value.";
+            throw std::runtime_error(msg);
+        }
+    }
+
+    ++it;
+    std::string str(*it);
+    int val = std::stoi(str);
+
+    this->valueInteger = val;
+}
+
+int IntegerArgumentMarshaler::get(ArgumentMarshaler& am) {
+    assert(&am != nullptr && "IntegerArgumentMarshaler->get->Argument is NULL.");
+
+    return ((IntegerArgumentMarshaler&)am).valueInteger;
+}
+
+DoubleArgumentMarshaler::DoubleArgumentMarshaler() : valueDouble(0)  {}
+
+void DoubleArgumentMarshaler::set(std::vector<std::string>::iterator& it, const std::vector<std::string>::iterator& end) {
+
+    {
+        auto tmp = it + 1;
+        if(tmp == end) {
+            std::string msg("Wrong parameter option for argument '");
+            msg += *it;
+            msg += "'.";
+            throw std::runtime_error(msg);
+        }
+        if (tmp->length() > 1) {
+            if(tmp->at(0) == '-' && !std::isdigit(tmp->at(1))) {
+                std::string msg("Invalid option for argument '");
+                msg += *it;
+                msg += "' ; '-' cannot be followed by characters. A double value is required.";
+                throw std::runtime_error(msg);
+            }
+        }
+        if(!StringHelper::isDouble(*tmp)) {
+            std::string msg("Argument ");
+            msg += *it;
+            msg += " require a Double value.";
+            throw std::runtime_error(msg);
+        }
+    }
+
+    ++it;
+    std::string str(*it);
+    double val = std::stod(str);
+    this->valueDouble = val;
+}
+
+double DoubleArgumentMarshaler::get(ArgumentMarshaler& am)  {
+    assert(&am != nullptr && "DoubleArgumentMarshaler->get->Argument is NULL.");
+
+    return ((DoubleArgumentMarshaler&)am).valueDouble;
 }

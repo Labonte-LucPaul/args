@@ -14,12 +14,22 @@ struct flags {
         std::string login = "l";
 }fl;
 
+void printHelp() {
+
+    std::cout << "Help...";
+
+    std::exit(0);
+}
 int main(int argc, char* argv[]) {
 
 
     try {
 
-        Args args("l,m,p#,d*,t##", argc, argv);
+        Args args("l,m,p#,d*,t##,h", argc, argv);
+
+        bool help = args.getBoolean("h");
+        if(help)
+            printHelp();
 
         bool test = args.getBoolean(fl.login);
         bool tm = args.getBoolean("m");
