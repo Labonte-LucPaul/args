@@ -15,7 +15,7 @@
 #include <sstream>
 #include <string>
 #include <algorithm>
-#include <iostream>
+
 class StringHelper {
 
     public:
@@ -57,7 +57,7 @@ class StringHelper {
 
         static inline bool isNumber(std::string str) {
             size_t neg = std::count(str.begin(), str.end(), '-');
-            if(neg > 1)
+            if(neg > 1 || neg == str.length())
                 return false;
 
             return !str.empty() && std::find_if(str.begin(),
@@ -70,7 +70,7 @@ class StringHelper {
                 return false;
 
             size_t neg = std::count(str.begin(), str.end(), '-');
-            if(neg > 1)
+            if(neg > 1 || neg == str.length())
                 return false;
 
             return !str.empty() &&

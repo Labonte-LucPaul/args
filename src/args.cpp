@@ -39,12 +39,16 @@ void Args::parseSchemaElement(const std::string element) {
 
     if(elemTail.length() == 0)
         this->marshalers->insert(std::pair<std::string, std::unique_ptr<BoolArgumentMarshaler>>(key, std::make_unique<BoolArgumentMarshaler>()));
+
     else if(elemTail.compare("*") == 0)
         this->marshalers->insert(std::pair<std::string, std::unique_ptr<StringArgumentMarshaler>>(key, std::make_unique<StringArgumentMarshaler>()));
+
     else if(elemTail.compare("#") == 0)
         this->marshalers->insert(std::pair<std::string, std::unique_ptr<IntegerArgumentMarshaler>>(key, std::make_unique<IntegerArgumentMarshaler>()));
+
     else if(elemTail.compare("##") == 0)
-            this->marshalers->insert(std::pair<std::string, std::unique_ptr<DoubleArgumentMarshaler>>(key, std::make_unique<DoubleArgumentMarshaler>()));
+        this->marshalers->insert(std::pair<std::string, std::unique_ptr<DoubleArgumentMarshaler>>(key, std::make_unique<DoubleArgumentMarshaler>()));
+
     else
         throw std::runtime_error("Wrong shema type.");
 }
@@ -170,7 +174,7 @@ void IntegerArgumentMarshaler::set(std::vector<std::string>::iterator& it, const
             if(tmp->at(0) == '-' && !std::isdigit(tmp->at(1))) {
                 std::string msg("Invalid option for argument '");
                 msg += *it;
-                msg += "' ; '-' cannot be followed by characters. An Integer value is required";
+                msg += "' ; '-' cannot be followed by characters. A signed integer value is required";
                 throw std::runtime_error(msg);
             }
         }
@@ -211,7 +215,7 @@ void DoubleArgumentMarshaler::set(std::vector<std::string>::iterator& it, const 
             if(tmp->at(0) == '-' && !std::isdigit(tmp->at(1))) {
                 std::string msg("Invalid option for argument '");
                 msg += *it;
-                msg += "' ; '-' cannot be followed by characters. A double value is required.";
+                msg += "' ; '-' cannot be followed by characters. A signed double value is required.";
                 throw std::runtime_error(msg);
             }
         }
